@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 import app from "./src/app.js";
 import config from "./src/config/index.js";
-// How to connect to DB
-// 1. Create a method
-// Run this method  => IIFE
 
+/*
+How to connect to DB
+1. Create a method
+Run this method  => IIFE
+*/
 ( async() => {
     try {
        await mongoose.connect(config.MONGODB_URL)
