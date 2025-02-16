@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import AuthRoles from "../utils/authRoles.js";
 import bcrypt, { compare } from "bcryptjs";
+import JWT from "jsonwebtoken"
+import config from "../config/index.js";
 
 
 const userSchema = new mongoose.Schema(
@@ -43,6 +45,12 @@ userSchema.methods = {
     // compare password
     comparePassword : async function(enteredPassword){
        return await bcrypt.compare(enteredPassword,this.password)
+    },
+    // generate JWT token
+    getJWTtoken : function(){
+        JWT.sign({_id : this._id, role : this.role},config.JWT_SECRET, {
+            expiresIn : config.JWT_EXPIRY
+        })
     }
 }
 
