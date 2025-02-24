@@ -42,3 +42,38 @@ export const signUp = asyncHandler(async(req,res) => {
         token
     })
 })
+
+export const login = asyncHandler(async(req,res) =>{
+
+    const {email, password} = req.body;
+
+    if(!email || !password){
+        throw new CustomError("All fields are necessary", 400)
+    }
+
+    // Find user by email
+    const user = await User.findOne({email}).select("+password")
+    
+    if(!user){
+        throw new CustomError("Invalid credentials", 400)
+    }
+
+    // Compare password
+    const isPasswordMatched = await user.comparePassword(password)
+
+    if(!isPasswordMatched){
+        throw new CustomError("Incorrect password", 400)
+    }
+
+    // Generate JWT Token
+    const token = user.getJWTtoken()
+    res.cookie("token", token, cookieOptions)
+    user.password = undefined
+
+    return res.status(200).json({
+        success : true,
+        message : "User logged in successfull",
+        user
+    })
+
+})
