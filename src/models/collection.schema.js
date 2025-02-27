@@ -11,7 +11,7 @@ const collectionSchema = new mongoose.Schema(
                     "Collection name should be more thn 120 characters"
                 ]
               }
-    },
+    }, 
     {
         timestamps : true
     }
